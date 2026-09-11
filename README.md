@@ -15,6 +15,10 @@ Version embarquée : **14 suppression des mouvements**. Les trois fichiers sourc
 
 ## Matériel et branchements
 
+![Plan de montage Meccanoid G15 et ESP32 : deux chaînes de servos, yeux et alimentation externe](docs/Meccanoid_ESP32_branchements.png)
+
+[Ouvrir le plan en pleine résolution](docs/Meccanoid_ESP32_branchements.png).
+
 - ESP32 DevKit / WROOM-32 classique avec BLE, câble USB de données.
 - Quatre servomoteurs intelligents Meccanoid, deux par bras.
 - Module yeux RGB Meccanoid.
