@@ -105,7 +105,17 @@ Pendant une lecture, les yeux peuvent changer et un nouveau mouvement peut rempl
 
 ## Connecter Bubblai
 
-Ouvrir [Bubblai](https://app.bubblai.fr/) dans Chrome, activer le Bluetooth de l'appareil, puis utiliser la bulle **Communication** en Bluetooth BLE. Déclencher la connexion et sélectionner **Mecanoid** dans la fenêtre du navigateur. Le nom est volontairement écrit sans deuxième « c » dans le firmware.
+### Connexion Bluetooth avec Google Chrome
+
+**Utiliser Google Chrome pour cette connexion Bluetooth BLE.** Ouvrir directement [Bubblai](https://app.bubblai.fr/) dans Chrome, plutôt que dans le navigateur intégré d'une autre application. La compatibilité dépend aussi du système ; Chrome sur Android ou sur un ordinateur compatible est le point de départ de ce guide.
+
+1. Allumer l'ESP32 avec le programme téléversé et activer le Bluetooth dans les paramètres du téléphone ou de l'ordinateur.
+2. Ouvrir Bubblai dans Chrome, à l'adresse HTTPS ci-dessus.
+3. Dans la bulle **Communication** de l'agent, choisir la connexion **Bluetooth BLE**, puis déclencher la connexion.
+4. Dans la fenêtre de choix ouverte par Chrome, sélectionner **Mecanoid**, puis valider la connexion. Cette sélection doit être faite par l'utilisateur.
+5. Envoyer `[YEUX_BLEU]` pour vérifier que le robot reçoit les commandes.
+
+Le nom **Mecanoid** est volontairement écrit sans deuxième « c » dans le firmware. Si un autre logiciel est déjà connecté au robot, le déconnecter avant de réessayer.
 
 La connexion utilise le BLE/GATT intégré à l'ESP32 et un service UART. Aucun module HC-05 ou HC-06 n'est nécessaire. Si les réglages de la bulle demandent les UUID, utiliser :
 
@@ -117,7 +127,30 @@ La connexion utilise le BLE/GATT intégré à l'ESP32 et un service UART. Aucun 
 
 Envoyer d'abord `[YEUX_BLEU]` depuis la communication pour vérifier le chemin complet. Le firmware accepte aussi du texte de commandes sans crochets en BLE, pour les intégrations qui retirent les délimiteurs. Utiliser les crochets dans les instructions destinées à l'agent et dans la console USB.
 
-Web Bluetooth requiert un contexte sécurisé HTTPS et une action de l'utilisateur pour choisir l'appareil. Sous Linux, la documentation Chrome indique d'activer **Experimental Web Platform features** dans `chrome://flags/#experimental-web-platform-features`, puis de relancer le navigateur. La disponibilité varie selon le système : voir la [documentation officielle Web Bluetooth](https://developer.chrome.com/docs/capabilities/bluetooth).
+### Réglage Chrome sous Linux / Ubuntu
+
+La [documentation officielle Chrome](https://developer.chrome.com/docs/capabilities/bluetooth) indique un réglage supplémentaire sous Linux :
+
+1. Copier `chrome://flags/#experimental-web-platform-features` dans la barre d'adresse de Chrome.
+2. Régler **Experimental Web Platform features** sur **Enabled**.
+3. Cliquer sur **Relaunch** pour relancer Chrome.
+4. Revenir dans Bubblai et recommencer la connexion depuis la bulle Communication.
+
+Ce réglage concerne Linux ; il n'est pas à activer systématiquement sur les autres systèmes. Web Bluetooth exige HTTPS et une action de l'utilisateur pour ouvrir le choix des appareils. Si la fenêtre ne s'ouvre pas, vérifier le navigateur, le Bluetooth du système et les autorisations accordées à Chrome.
+
+### Créer une clé API xAI pour la voix Realtime
+
+Pour utiliser xAI / Grok avec la voix en temps réel dans Bubblai :
+
+1. Ouvrir la [console xAI](https://console.x.ai/) et créer un compte ou se connecter.
+2. Ouvrir [API Keys — créer une clé API](https://console.x.ai/team/default/api-keys) et générer une clé.
+3. Consulter la [facturation et les crédits API](https://console.x.ai/team/default/billing), puis créditer le compte si nécessaire. L'utilisation de l'API est facturée ; consulter les tarifs affichés avant de démarrer.
+4. Dans Bubblai, renseigner cette clé dans la configuration du fournisseur **xAI**, puis sélectionner xAI dans les réglages **Realtime**. Les intitulés précis peuvent varier selon la version de l'application.
+5. Autoriser le microphone dans Chrome et lancer la conversation après avoir vérifié la connexion BLE du robot.
+
+Une clé API est un accès personnel à son compte fournisseur : la garder privée, ne pas la mettre dans le dépôt GitHub ni dans le programme Arduino. Le test Bluetooth des yeux et des mouvements ne nécessite aucune clé API ; la clé sert à la conversation avec xAI.
+
+Référence : [guide officiel xAI pour créer un compte et une clé API](https://docs.x.ai/developers/quickstart).
 
 Pour la démonstration vocale, activer aussi les capacités Voix ou Realtime de l'agent et l'autorisation du microphone. Les instructions de l'agent doivent lui donner les commandes ci-dessus et les mouvements réellement appris. Ne pas lui annoncer une bibliothèque de gestes inexistante. La parole et son intégration aux balises sont gérées par Bubblai ; ce programme n'embarque ni LLM ni synthèse vocale, et ne garantit pas une synchronisation mot à mot entre voix et moteurs.
 
