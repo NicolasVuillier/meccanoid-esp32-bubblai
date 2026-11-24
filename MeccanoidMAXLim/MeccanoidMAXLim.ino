@@ -20,6 +20,9 @@
 #define UART_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
 constexpr int PIN_SERVOS = 25;
+// Set true only for the first boot of a dedicated blank MAX filesystem.
+// Keep false on a board with recordings or other data to preserve.
+constexpr bool FORMAT_NEW_MAX_FS = false;
 constexpr uint32_t MAX_RECORD_MS = 60000;
 constexpr uint32_t FEEDBACK_TIMEOUT = 1500;
 constexpr uint16_t MAX_SAMPLES = 600;
@@ -396,7 +399,7 @@ void setup() {
   Serial.begin(9600);
   head.setAutoUpdate(false);
   claw.setAutoUpdate(false);
-  fsReady = LittleFS.begin(false); // never silently format an existing robot
+  fsReady = LittleFS.begin(FORMAT_NEW_MAX_FS); // false by default: do not format existing data
   if (!fsReady) Serial.println("LittleFS mount failed: initialize a dedicated MAX partition before recording");
   releaseAll();
   BLEDevice::init("Mecanoid");
